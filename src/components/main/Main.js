@@ -1,8 +1,6 @@
-import axios from "axios";
 import Footer from "../footer/Footer.js";
 import Header from "../header/Header.js";
 import * as a from "./StyledMain.js";
-import foodBox from "../../apis/instance.js";
 
 function Main() {
   return (
