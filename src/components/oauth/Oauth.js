@@ -36,7 +36,6 @@ function Oauth() {
   useEffect(() => {
     if (encodedValue !== prevEncodedValueRef.current) {
       loginMutate();
-      // Update the previous value
       prevEncodedValueRef.current = encodedValue;
     }
   }, [encodedValue, loginMutate]);
