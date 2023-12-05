@@ -38,7 +38,7 @@ export const NavWrap = styled.div`
     display: flex;
 `;
 
-export const LoginBtn = styled.button`
+export const LoginButton = styled.button`
     border: 1.5px solid #D9D9D9;
     margin-left: 50px;
     margin-right: 30px;
@@ -63,7 +63,7 @@ export const LoginL = styled.img`
 
 export const Login = styled.div`
     margin-right: 3px;
-`;
+`
 
 export const Page = styled.div`
     border-left: 2px solid #D9D9D9;
