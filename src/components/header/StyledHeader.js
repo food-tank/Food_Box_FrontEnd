@@ -65,11 +65,14 @@ export const Login = styled.div`
     margin-right: 3px;
 `
 
-export const Page = styled.div`
+export const Page = styled.button`
+    border: 0;
     border-left: 2px solid #D9D9D9;
     text-align: center;
     padding-top: 4px;
     padding-left: 20px;
     margin-right: 20px;
+    background-color: white;
+    font-size: 15px;
 `;
 
