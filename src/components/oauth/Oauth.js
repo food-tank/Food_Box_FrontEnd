@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import foodBox from "../../apis/instance";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 
 function Oauth() {
   const location = useLocation();
@@ -18,7 +18,8 @@ function Oauth() {
 
   const navigate = useNavigate();
 
-  const { mutate: loginMutate } = useMutation(() => postCode(encodedValue), {
+  const { mutate: loginMutate } = useMutation({
+    mutationFn: () => postCode(encodedValue),
     onSuccess: (data) => {
       const { accessToken, refreshToken } = data;
 

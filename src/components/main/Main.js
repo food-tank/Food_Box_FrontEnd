@@ -7,6 +7,7 @@ import { getFoodData } from "../../services/food.js";
 import { createLike, deleteLike } from "../../services/like.js";
 import FilledHeart from '../../images/like2.png'
 import Heart from '../../images/like.png'
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 function Main() {
 
@@ -16,15 +17,40 @@ function Main() {
   const [res, setRes] = useState({
     foods : []
   });
-  const [criteria, setCriteria] = useState("recent")
-  const [type, setType] = useState("DIET")
+  const [criteria, setCriteria] = useState("recent");
+  const [type, setType] = useState("DIET");
+
+  const { data: foodsData, refetch } = useQuery({
+    queryKey: ['foods'],
+    queryFn: async () => {
+      const { data } = await foodBox.get(`/food?size=1000&page=0`, {
+        headers: {Authorization : localStorage.getItem('accessToken')}
+      });
+      return data
+    },
+  });
 
   useEffect(() => {
-    foodBox.get(`/food?size=1000&page=0`, {
-      headers: {Authorization : localStorage.getItem('accessToken')}
-    })
-      .then((res) => setRes(res.data));
-  }, [])
+    console.log(foodsData)
+    if (foodsData) {
+      setRes(foodsData)
+      console.log(foodsData)
+    }
+  }, [foodsData])
+
+  const { mutate: deleteLikeMutate } = useMutation({
+    mutationFn: (foodId) => deleteLike(foodId),
+    onSuccess() {
+      refetch();
+    }
+  })
+
+  const { mutate: createLikeMutate } = useMutation({
+    mutationFn: (foodId) => createLike(foodId),
+    onSuccess() {
+      refetch();
+    }
+  })
   
   return (
     <div>
@@ -41,8 +67,8 @@ function Main() {
           <a.FilterB selected={query===2} onClick={() => {setQuery(2); setCriteria("like"); getFoodData(type, "like", setRes)}}>좋아요순</a.FilterB>
         </a.ListWrap>
         <a.MainContent>
-          {res.foods.map(food => (
-            <a.ContentBox>
+          {res?.foods?.map(food => (
+            <a.ContentBox key={food.foodId}>
             <a.Thumbnail src={food.imgUrl} />
             <a.Content>
               <a.CTitleWrap>
@@ -50,7 +76,8 @@ function Main() {
                 <a.NickName>{food.writer.name}</a.NickName>
               </a.CTitleWrap>
               <a.LikeWrap>
-                <a.Like onClick={() => {food.isLiked ? deleteLike(food.foodId) : createLike(food.foodId) }} src={food.isLiked ? FilledHeart : Heart} />
+                <a.Like onClick={() => {
+                  food.isLiked ? deleteLikeMutate(food.foodId) : createLikeMutate(food.foodId) }} src={food.isLiked ? FilledHeart : Heart} />
                 <a.LikeCount>{food.likeCount}</a.LikeCount>
               </a.LikeWrap>
             </a.Content>

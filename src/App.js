@@ -7,7 +7,7 @@ import NotFound from "./components/notFound/NotFound";
 import Main from "./components/main/Main";
 import ViewContent from "./components/viewContent/ViewContent";
 import Oauth from "./components/oauth/Oauth";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient({
   defaultOptions: {
