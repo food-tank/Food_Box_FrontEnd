@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 
 export const ContentWrap = styled.div`
     display: flex;
@@ -36,6 +36,12 @@ export const MenuB = styled.div`
     padding: 4.5px;
     background-color: #F3F3F3;
     color: #B4B5B6;
+    cursor: pointer;
+
+    ${({selected})=> selected && css`
+        background-color: white;
+        color: black;
+    `}
 `;
 
 export const ListWrap = styled.div`
@@ -61,6 +67,11 @@ export const FilterB = styled.div`
     height: 16px;
     border-left: 1px solid #D9D9D9;
     color: #B4B5B6;
+    cursor: pointer;
+
+    ${({selected})=> selected && css`
+        color: black;
+    `}
 `;
 
 export const MainContent = styled.div`

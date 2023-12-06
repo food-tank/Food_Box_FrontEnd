@@ -56,6 +56,28 @@ export const LoginButton = styled.button`
   }
 `;
 
+export const Logout = styled.button`
+    border: 1.5px solid #D9D9D9;
+    margin-left: 50px;
+    margin-right: 30px;
+    width: 150px;
+    text-align: center;
+    height: 100%;
+    background-color: white;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover{  
+    background-color : #4285F4;
+    color : white
+  }
+`;
+
+export const LogoutText = styled.div`
+    margin: 0 auto;
+`
+
 export const LoginL = styled.img`
     height: 15px;
     margin-right: 3px;
