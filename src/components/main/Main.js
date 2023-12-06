@@ -4,6 +4,9 @@ import Footer from "../footer/Footer.js";
 import Header from "../header/Header.js";
 import * as a from "./StyledMain.js";
 import { getFoodData } from "../../services/food.js";
+import { createLike, deleteLike } from "../../services/like.js";
+import FilledHeart from '../../images/like2.png'
+import Heart from '../../images/like.png'
 
 function Main() {
 
@@ -17,7 +20,9 @@ function Main() {
   const [type, setType] = useState("DIET")
 
   useEffect(() => {
-    foodBox.get(`/food?size=1000&page=0`)
+    foodBox.get(`/food?size=1000&page=0`, {
+      headers: {Authorization : localStorage.getItem('accessToken')}
+    })
       .then((res) => setRes(res.data));
   }, [])
   
@@ -45,7 +50,7 @@ function Main() {
                 <a.NickName>{food.writer.name}</a.NickName>
               </a.CTitleWrap>
               <a.LikeWrap>
-                <a.Like src={require("../../images/like.png")} />
+                <a.Like onClick={() => {food.isLiked ? deleteLike(food.foodId) : createLike(food.foodId) }} src={food.isLiked ? FilledHeart : Heart} />
                 <a.LikeCount>{food.likeCount}</a.LikeCount>
               </a.LikeWrap>
             </a.Content>

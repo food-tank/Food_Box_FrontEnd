@@ -76,6 +76,7 @@ export const Logout = styled.button`
 
 export const LogoutText = styled.div`
     margin: 0 auto;
+    
 `
 
 export const LoginL = styled.img`
