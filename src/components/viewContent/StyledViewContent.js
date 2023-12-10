@@ -121,7 +121,8 @@ export const C = styled.div`
 `;
 
 export const Recipe = styled.div`
-
+    width: 100%;
+    height: 100%;
 `;
 
 export const T = styled.div`
@@ -132,12 +133,16 @@ export const T = styled.div`
 
 export const List = styled.div`
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: space-between;
+    padding: 0px;
     margin-bottom: 20px;
+    gap: 97px;
 `;
 export const ListTextWrap = styled.div`
     margin-left: 30px;
+    width: fit-content;
+    height: fit-content;
 `;
 
 export const ListTextT = styled.div`

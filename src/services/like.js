@@ -11,3 +11,10 @@ export const deleteLike = async (foodId) => {
     headers : {Authorization : localStorage.getItem('accessToken')}
   })
 }
+
+export const checkLike = async (foodId, setLike) => {
+  await foodBox.get(`/like/${foodId}`, {
+    headers : {Authorization : localStorage.getItem('accessToken')}
+  })
+    .then((res) => setLike(res.data));
+}

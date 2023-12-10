@@ -27,8 +27,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/signInCheck" element={<SignInCheck />} />
-          <Route path="/ViewContent" element={<ViewContent />} />
-          <Route path="login/oauth2/code/google" element={<Oauth />} />
+          <Route path="/ViewContent/:foodId" element={<ViewContent />} />
+          <Route path="/login/oauth2/code/google" element={<Oauth />} />
           <Route path={"*"} element={<NotFound />} />
         </Routes>
       </BrowserRouter>

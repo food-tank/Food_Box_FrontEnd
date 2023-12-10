@@ -1,38 +1,120 @@
+import { useEffect } from 'react';
 import Footer from '../footer/Footer.js';
 import Header from '../header/Header.js';
 import * as a from './StyledViewContent.js';
+import { getFoodOne, getMatrial, getRecipe } from '../../services/food.js';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import FilledHeart from '../../images/like2.png'
+import Heart from '../../images/like.png'
+import { checkLike, createLike, deleteLike } from '../../services/like.js';
 
 function ViewContent() {
+    const [res, setRes] = useState();
+    const [material, setMaterial] = useState([]);
+    const [recipe, setRecipe] = useState();
+    const [like, setLike] = useState(false);
+    const {foodId} = useParams();
+    let difficulty, difficultyImg, servingImg;
+
+    useEffect(() => {
+        getFoodOne(foodId, setRes);
+    }, [])
+
+    useEffect(() => {
+        getMatrial(foodId, setMaterial);
+    }, [])
+
+    useEffect(() => {
+        getRecipe(foodId, setRecipe);
+    }, [])
+
+    useEffect(() => {
+        checkLike(foodId, setLike);
+    }, [])
+
+    switch(res?.difficulty) {
+        case "NORMAL":
+            difficulty = "보통";
+            difficultyImg = require('../../images/nomal.png');
+            break;
+        case "VERY_EASY":
+            difficulty = "매우 쉬움"; 
+            difficultyImg = require('../../images/supereasy.png');
+            break;
+        case "EASY":
+            difficulty = "쉬움"; 
+            difficultyImg = require('../../images/easy.png');
+            break;
+        case "VERY_HARD":
+            difficulty = "매우 어려움";  
+            difficultyImg = require('../../images/superhard.png');
+            break;       
+        case "HARD":
+            difficulty = "어려움"; 
+            difficultyImg = require('../../images/hard.png');
+            break
+        default:
+            difficultyImg = '../../images/nomal.png';
+    }
+
+    switch(res?.serving) {
+        case 1: 
+            servingImg = require('../../images/one.png');
+            break;
+        case 2: 
+            servingImg = require('../../images/two.png');
+            break;
+        case 3: 
+            servingImg = require('../../images/three.png');
+            break;
+        case 4: 
+            servingImg = require('../../images/four.png');
+            break;
+        case 5:
+            servingImg = require('../../images/five.png');
+            break;
+        default:
+            servingImg = require('../../images/five.png');
+    }
+
   return (
     <div>
         <Header/>
         <a.ContentWrap>
             <a.TitleWrap>
                 <a.Wrap>
-                    <a.Title>엄마보고싶다</a.Title>
-                    <a.Writer>작성자: 집에가고싶다</a.Writer>
-                    <a.Date>작성일: 2023-11-21</a.Date>
+                    <a.Title>{res?.name}</a.Title>
+                    <a.Writer>{res?.writer.name}</a.Writer>
+                    <a.Date>작성일: {res?.createTime}</a.Date>
                 </a.Wrap>
                 <a.LikeWrap>
-                    <a.Like src={require('../../images/like.png')}/>
-                    <a.LikeCount>18</a.LikeCount>
+                    <a.Like onClick={() => {
+                        if (like) {
+                            deleteLike(res?.foodId);
+                            window.location.reload();
+                        } else {
+                            createLike(res?.foodId);
+                            window.location.reload();
+                        }}} src={like ? FilledHeart : Heart}/>
+                    <a.LikeCount>{res?.likeCount}</a.LikeCount>
                 </a.LikeWrap>
             </a.TitleWrap>
             <a.MainContent>
-                <a.MainImg src={require('../../images/a.jpg')}/>
+                <a.MainImg src={res?.imgUrl}/>
                 <a.InfoWrap>
                     <a.Info>
                         <a.IconWrap>
-                            <a.Icon src={require('../../images/one.png')}/>
-                            <a.IconInfo>1인분</a.IconInfo>
+                            <a.Icon src={servingImg}/>
+                            <a.IconInfo>{res?.serving}인분</a.IconInfo>
                         </a.IconWrap>
                         <a.IconWrap>
                             <a.Icon src={require('../../images/time.png')}/>
-                            <a.IconInfo>30분</a.IconInfo>
+                            <a.IconInfo>{res?.cookingTime}분</a.IconInfo>
                         </a.IconWrap>
                         <a.IconWrap>
-                            <a.Icon src={require('../../images/nomal.png')}/>
-                            <a.IconInfo>평범함</a.IconInfo>
+                            <a.Icon src={difficultyImg}/>
+                            <a.IconInfo>{difficulty}</a.IconInfo>
                         </a.IconWrap>
                     </a.Info>
                     <a.Ingredients>
@@ -40,60 +122,28 @@ function ViewContent() {
                             <a.A>재료</a.A>
                             <a.B>클릭해서 링크를 확인해보세요!</a.B>
                         </a.AWrap>
-                        <a.C>집에 가고싶은 염원 (1스푼)</a.C>
-                        <a.C>엄마가 보고싶은 마음 (1컵)</a.C>
-                        <a.C>졸림 (100g) (생략 가능)</a.C>
-                        <a.C>약간의 피곤함 (생략 가능)</a.C>
+                        {material?.map(material => (
+                            <a.C>{material.name}</a.C>
+                        ))}
                     </a.Ingredients>
                 </a.InfoWrap>
             </a.MainContent>
             <a.Recipe>
                 <a.T>레시피</a.T>
+                {recipe?.map((recipe, i) => (
                 <a.List>
                     <a.ListTextWrap>
                         <a.ListTextT>
-                            1. 집에보내주세요
+                            {i + 1}. {recipe?.title}
                         </a.ListTextT>
                         <a.ListTextC>
-                            간절하게 집에가고싶다 진짜 왜 안보내주는거지 난 언제 집에 갈 수 있는거지 아 아직도 화요일이라니 절망적이야 이게 말이 되냐고.... 집가서 마라샹궈에 짜파게티 야무지게 먹고싶다 아 배고파
+                            {recipe?.content}
                         </a.ListTextC>
                     </a.ListTextWrap>
-                    <a.ListImg src={require('../../images/b.jpg')}/>
+                    <a.ListImg src={recipe.imgUrl}/>
                 </a.List>
-                <a.List>
-                    <a.ListTextWrap>
-                        <a.ListTextT>
-                            1. 집에보내주세요
-                        </a.ListTextT>
-                        <a.ListTextC>
-                            간절하게 집에가고싶다 진짜 왜 안보내주는거지 난 언제 집에 갈 수 있는거지 아 아직도 화요일이라니 절망적이야 이게 말이 되냐고.... 집가서 마라샹궈에 짜파게티 야무지게 먹고싶다 아 배고파
-                        </a.ListTextC>
-                    </a.ListTextWrap>
-                    <a.ListImg src={require('../../images/b.jpg')}/>
-                </a.List>
-                <a.List>
-                    <a.ListTextWrap>
-                        <a.ListTextT>
-                            1. 집에보내주세요
-                        </a.ListTextT>
-                        <a.ListTextC>
-                            간절하게 집에가고싶다 진짜 왜 안보내주는거지 난 언제 집에 갈 수 있는거지 아 아직도 화요일이라니 절망적이야 이게 말이 되냐고.... 집가서 마라샹궈에 짜파게티 야무지게 먹고싶다 아 배고파
-                        </a.ListTextC>
-                    </a.ListTextWrap>
-                    <a.ListImg src={require('../../images/b.jpg')}/>
-                </a.List>
-                <a.List>
-                    <a.ListTextWrap>
-                        <a.ListTextT>
-                            1. 집에보내주세요
-                        </a.ListTextT>
-                        <a.ListTextC>
-                            간절하게 집에가고싶다 진짜 왜 안보내주는거지 난 언제 집에 갈 수 있는거지 아 아직도 화요일이라니 절망적이야 이게 말이 되냐고.... 집가서 마라샹궈에 짜파게티 야무지게 먹고싶다 아 배고파
-                        </a.ListTextC>
-                    </a.ListTextWrap>
-                    <a.ListImg src={require('../../images/b.jpg')}/>
-                </a.List>
-                <a.Comment>곧 수업끝난당~곧 수업끝난당~곧 수업끝난당~곧 수업끝난당~곧 수업끝난당~곧 수업끝난당~곧 수업끝난당~곧 수업끝난당~곧 수업끝난당~곧 수업끝난당~곧 수업끝난당~곧 수업끝난당~</a.Comment>
+                ))}
+                <a.Comment>{res?.content}</a.Comment>
             </a.Recipe>
         </a.ContentWrap>
         <Footer/>

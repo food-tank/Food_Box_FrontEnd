@@ -13,7 +13,6 @@ function Main() {
 
   const [choice, setChoice] = useState(1);
   const [query, setQuery] = useState(1);
-
   const [res, setRes] = useState({
     foods : []
   });
@@ -21,9 +20,9 @@ function Main() {
   const [type, setType] = useState("DIET");
 
   const { data: foodsData, refetch } = useQuery({
-    queryKey: ['foods'],
+    queryKey: ['foods', type, criteria],
     queryFn: async () => {
-      const { data } = await foodBox.get(`/food?size=1000&page=0`, {
+      const { data } = await foodBox.get(`/food?size=1000&page=0&type=${type}&criteria=${criteria}`, {
         headers: {Authorization : localStorage.getItem('accessToken')}
       });
       return data
@@ -31,10 +30,8 @@ function Main() {
   });
 
   useEffect(() => {
-    console.log(foodsData)
     if (foodsData) {
       setRes(foodsData)
-      console.log(foodsData)
     }
   }, [foodsData])
 
@@ -68,8 +65,12 @@ function Main() {
         </a.ListWrap>
         <a.MainContent>
           {res?.foods?.map(food => (
-            <a.ContentBox key={food.foodId}>
-            <a.Thumbnail src={food.imgUrl} />
+            <a.ContentBox key={food.foodId} >
+            <a.ThumbnailBox to={{
+              pathname: `ViewContent/${food.foodId}`
+            }}>
+            <a.Thumbnail src={food.imgUrl}  />
+            </a.ThumbnailBox>
             <a.Content>
               <a.CTitleWrap>
                 <a.ContentTitle>{food.foodName}</a.ContentTitle>

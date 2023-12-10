@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled, {css} from "styled-components";
 
 export const ContentWrap = styled.div`
@@ -87,12 +88,16 @@ export const ContentBox = styled.div`
     //background-color: pink;
     width: 227.5px;
     margin-right: 30px;
-
+    
 `;
 
 export const Thumbnail = styled.img`
     width: 227.5px;
 `;
+
+export const ThumbnailBox = styled(Link)`
+
+`
 
 export const Content = styled.div`
     display: flex;
@@ -123,6 +128,7 @@ export const LikeWrap = styled.div`
 
 export const Like = styled.img`
     height: 25px;
+    cursor: pointer
 `;
 
 export const LikeCount = styled.div`
