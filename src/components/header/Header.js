@@ -7,6 +7,10 @@ function Header() {
   const goToMain = () => {
     navigate("/");
   }
+
+  const goToPosting = () => {
+    navigate("/Posting")
+  }
   
   return (
     <a.HeaderBox>
@@ -23,7 +27,7 @@ function Header() {
               <a.Login>구글로 로그인</a.Login>
             </a.LoginButton>}
             <a.Page>마이페이지</a.Page>
-            <a.Page>식단공유하기</a.Page>
+            <a.Page onClick={goToPosting}>식단공유하기</a.Page>
         </a.NavWrap>
     </a.HeaderBox>
   );
